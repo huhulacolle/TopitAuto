@@ -64,9 +64,18 @@ export default {
         this.message = "Compression";
         await this.resize(pathUrl);
         this.message = "création de la vidéo";
-        const pathVideo = await ipcRenderer.invoke('video', pathUrl, this.musicPath);
-        this.message = `la vidéo est enregistrer dans ${pathVideo}`;
-        exec(pathVideo);
+        await ipcRenderer.invoke('video', pathUrl, this.musicPath)
+        .then(
+          pathVideo => {
+            this.message = `la vidéo est enregistrer dans ${pathVideo}`;
+            exec(pathVideo);
+          }
+        )
+        .catch(
+          error => {
+            this.message = error
+          }
+        );
         this.generateBool = false;
       }
     },

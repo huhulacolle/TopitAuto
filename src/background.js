@@ -61,94 +61,6 @@ async function createWindow() {
   }
 }
 
-ipcMain.handle("InfoSyst", async () => {
-  const os = require('os');
-  let Sys = {};
-  Sys.version = app.getVersion();
-  Sys.electron = process.versions.electron;
-  Sys.node = process.versions.node;
-  Sys.chrome = process.versions.chrome;
-  Sys.os = os.type() + " " + os.release();
-  return Sys;
-})
-
-async function dl(url) {
-  const imagePath = path.join(app.getPath('temp'), 'topitauto_temp')
-  fs.existsSync(imagePath) || fs.mkdirSync(imagePath);
-  emptyDirSync(imagePath);
-  let pathUrl = []
-  for (let i = 0; i < url.length; i++) {
-      await download.image({
-              url: url[i].url,
-              dest: imagePath
-          })
-          .then(({
-              filename
-          }) => {
-              pathUrl.push(filename);
-          })
-          .catch((err) => console.error(err));
-  }
-  return pathUrl
-}
-
-ipcMain.handle('download', async (event, url) => {
-  const pathUrl = await dl(url);
-  return pathUrl;
-})
-
-function video(pathUrl, musicPath) {
-  return new Promise((resolve, reject) => {
-    var videoOptions = {
-      fps: 25,
-      loop: 5, // seconds
-      transition: true,
-      transitionDuration: 1, // seconds
-      videoBitrate: 1024,
-      videoCodec: 'libx264',
-      size: '640x?',
-      audioBitrate: '128k',
-      audioChannels: 2,
-      format: 'mp4',
-      pixelFormat: 'yuv420p',
-    }
-    videoshow(pathUrl, videoOptions)
-      .audio(musicPath)
-      .save(path.join(app.getPath('videos'), "video.mp4"))
-      .on('start', function (command) {
-        console.log('ffmpeg process started:', command)
-      })
-      .on('error', function (err, stdout, stderr) {
-        console.error('Error:', err)
-        return reject(stderr);
-      })
-      .on('end', function (output) {
-        return resolve(output)
-      })
-  })
-} 
-
-ipcMain.handle('video', async (event, pathUrl, musicPath) => {
-  const pathVideo = await video(pathUrl, musicPath)
-  return pathVideo;
-})
-
-ipcMain.handle('getMusic', async () => {
-  let music = "";
-  await dialog.showOpenDialog({
-    defaultPath: app.getPath('music'),
-    filters: [
-      { name : 'MP3', extensions: ['mp3'] }
-    ]
-  })
-  .then(
-    path => {
-      music = path.filePaths[0];
-    }
-  )
-  return music;
-})
-
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
@@ -193,3 +105,91 @@ if (isDevelopment) {
     })
   }
 }
+
+ipcMain.handle("InfoSyst", async () => {
+  const os = require('os');
+  let Sys = {};
+  Sys.version = app.getVersion();
+  Sys.electron = process.versions.electron;
+  Sys.node = process.versions.node;
+  Sys.chrome = process.versions.chrome;
+  Sys.os = os.type() + " " + os.release();
+  return Sys;
+})
+
+async function dl(url) {
+  const imagePath = path.join(app.getPath('temp'), 'topitauto_temp')
+  fs.existsSync(imagePath) || fs.mkdirSync(imagePath);
+  emptyDirSync(imagePath);
+  let pathUrl = []
+  for (let i = 0; i < url.length; i++) {
+    await download.image({
+        url: url[i].url,
+        dest: imagePath
+      })
+      .then(({
+        filename
+      }) => {
+        pathUrl.push(filename);
+      })
+      .catch((err) => console.error(err));
+  }
+  for (let i = 0; i < pathUrl.length; i++) {
+    if (pathUrl[i].split(".").pop() == "webp") {
+      fs.unlinkSync(pathUrl[i]);
+      pathUrl.splice(i, 1);
+    }
+  }
+  return pathUrl
+}
+
+ipcMain.handle('download', async (event, url) => {
+  const pathUrl = await dl(url);
+  return pathUrl;
+})
+
+ipcMain.handle('video', async (event, pathUrl, musicPath) => {
+  return new Promise((resolve, reject) => {
+    var videoOptions = {
+      fps: 25,
+      loop: 5, // seconds
+      transition: true,
+      transitionDuration: 1, // seconds
+      videoBitrate: 1024,
+      videoCodec: 'libx264',
+      size: '640x?',
+      audioBitrate: '128k',
+      audioChannels: 2,
+      format: 'mp4',
+      pixelFormat: 'yuv420p',
+    }
+    videoshow(pathUrl, videoOptions)
+      .audio(musicPath)
+      .save(path.join(app.getPath('videos'), "video.mp4"))
+      .on('start', function (command) {
+        console.log('ffmpeg process started:', command)
+      })
+      .on('error', function (err, stdout, stderr) {
+        return reject(`Error: ${err} \n ${stderr}`);
+      })
+      .on('end', function (output) {
+        return resolve(output)
+      })
+  })
+})
+
+ipcMain.handle('getMusic', async () => {
+  let music = "";
+  await dialog.showOpenDialog({
+    defaultPath: app.getPath('music'),
+    filters: [
+      { name : 'MP3', extensions: ['mp3'] }
+    ]
+  })
+  .then(
+    path => {
+      music = path.filePaths[0];
+    }
+  )
+  return music;
+})
