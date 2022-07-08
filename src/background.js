@@ -123,16 +123,22 @@ async function dl(url) {
   emptyDirSync(imagePath);
   let pathUrl = []
   for (let i = 0; i < url.length; i++) {
-      await download.image({
-              url: url[i].url,
-              dest: imagePath
-          })
-          .then(({
-              filename
-          }) => {
-              pathUrl.push(filename);
-          })
-          .catch((err) => console.error(err));
+    await download.image({
+        url: url[i].url,
+        dest: imagePath
+      })
+      .then(({
+        filename
+      }) => {
+        pathUrl.push(filename);
+      })
+      .catch((err) => console.error(err));
+  }
+  for (let i = 0; i < pathUrl.length; i++) {
+    if (pathUrl[i].split(".").pop() == "webp") {
+      fs.unlinkSync(pathUrl[i]);
+      pathUrl.splice(i, 1);
+    }
   }
   return pathUrl
 }
@@ -142,7 +148,7 @@ ipcMain.handle('download', async (event, url) => {
   return pathUrl;
 })
 
-function video(pathUrl, musicPath) {
+ipcMain.handle('video', async (event, pathUrl, musicPath) => {
   return new Promise((resolve, reject) => {
     var videoOptions = {
       fps: 25,
@@ -164,18 +170,12 @@ function video(pathUrl, musicPath) {
         console.log('ffmpeg process started:', command)
       })
       .on('error', function (err, stdout, stderr) {
-        console.error('Error:', err)
-        return reject(stderr);
+        return reject(`Error: ${err} \n ${stderr}`);
       })
       .on('end', function (output) {
         return resolve(output)
       })
   })
-} 
-
-ipcMain.handle('video', async (event, pathUrl, musicPath) => {
-  const pathVideo = await video(pathUrl, musicPath)
-  return pathVideo;
 })
 
 ipcMain.handle('getMusic', async () => {
