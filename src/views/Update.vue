@@ -38,7 +38,7 @@ export default {
     methods: {
         checkUpdate() {
             console.log("test");
-            exec('start https://www.google.com/')
+            exec('start https://github.com/huhulacolle/TopitAuto/releases')
         }
     }
 }
