@@ -29,6 +29,7 @@
   </div>
   <div v-if="errorMessage" class="text-center h3" style="color: red;">
     {{errorMessage}}
+    
   </div>
 </template>
 
@@ -36,6 +37,7 @@
 import { GOOGLE_IMG_SCRAP } from 'google-img-scrap';
 import {ipcRenderer} from 'electron';
 const exec = require('child_process').exec;
+const { dialog } = require('electron')
 
 import * as JimpObj from 'jimp';
 const Jimp = JimpObj.default;
@@ -52,8 +54,12 @@ export default {
     }
   },
   methods: {
+    test() {
+
+    },
     async generateTop() {
       if (this.musicPath) {
+        dialog.showMessageBox(null)
         this.generateBool = true;
         this.errorMessage = null;
         this.message = null;
@@ -62,20 +68,27 @@ export default {
         this.message = "Téléchargement";
         const pathUrl = await ipcRenderer.invoke('download', url.result);
         this.message = "Compression";
-        await this.resize(pathUrl);
+        await this.resize(pathUrl)
+          .catch(
+            error => {
+              this.message = error;
+              return;
+            }
+          );
         this.message = "création de la vidéo";
         await ipcRenderer.invoke('video', pathUrl, this.musicPath)
-        .then(
-          pathVideo => {
-            this.message = `la vidéo est enregistrer dans ${pathVideo}`;
-            exec(pathVideo);
-          }
-        )
-        .catch(
-          error => {
-            this.message = error
-          }
-        );
+          .then(
+            pathVideo => {
+              this.message = `la vidéo est enregistrer dans ${pathVideo}`;
+              new Notification("Topit'Auto", {body: this.message});
+              exec(pathVideo);
+            }
+          )
+          .catch(
+            error => {
+              this.message = error
+            }
+          );
         this.generateBool = false;
       }
     },
@@ -92,10 +105,17 @@ export default {
       });
     },
     async resize(pathUrl) {
-      pathUrl.forEach(async p => {
-        const imgresize = await Jimp.read(p);
-        imgresize.resize(50, 50).write(p);
-      });
+      return new Promise((resolve, reject) => {
+        try {
+          pathUrl.forEach(async p => {
+            const imgresize = await Jimp.read(p);
+            imgresize.resize(50, 50).write(p);
+          });
+          return resolve();
+        } catch (error) {
+          return reject(error);
+        }
+      })
     }
   }
 }
