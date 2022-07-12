@@ -37,7 +37,6 @@
 import { GOOGLE_IMG_SCRAP } from 'google-img-scrap';
 import {ipcRenderer} from 'electron';
 const exec = require('child_process').exec;
-const { dialog } = require('electron')
 
 import * as JimpObj from 'jimp';
 const Jimp = JimpObj.default;
@@ -59,7 +58,6 @@ export default {
     },
     async generateTop() {
       if (this.musicPath) {
-        dialog.showMessageBox(null)
         this.generateBool = true;
         this.errorMessage = null;
         this.message = null;
