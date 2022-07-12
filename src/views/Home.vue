@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link to="/update" class="link-light h5 float-end update">A Propos / Mise à jour</router-link>
+    <router-link to="/update" class="link-light h5 float-end update" :class="{ disabled: generateBool }">A Propos / Mise à jour</router-link>
     <br><br>
     <form @submit.prevent="generateTop()">
       <h3>
@@ -27,10 +27,6 @@
       {{message}}
     </div>
   </div>
-  <div v-if="errorMessage" class="text-center h3" style="color: red;">
-    {{errorMessage}}
-    
-  </div>
 </template>
 
 <script>
@@ -46,7 +42,6 @@ export default {
     return {
       nomTop: null,
       path: "image",
-      errorMessage: null,
       message: null,
       musicPath: null,
       generateBool: false,
@@ -125,5 +120,9 @@ export default {
 } 
 .update:hover {
   text-decoration: underline;
+}
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
 }
 </style>
