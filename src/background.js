@@ -135,7 +135,7 @@ async function dl(url) {
       .catch((err) => console.error(err));
   }
   for (let i = 0; i < pathUrl.length; i++) {
-    if (pathUrl[i].split(".").pop() == "webp") {
+    if (pathUrl[i].split(".").pop() == "webp" || pathUrl[i].split(".").pop() == "gif" || pathUrl[i].split(".").pop() == "svg" || pathUrl[i].split("\\").pop() == "media") {
       fs.unlinkSync(pathUrl[i]);
       pathUrl.splice(i, 1);
     }
