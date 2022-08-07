@@ -1,6 +1,6 @@
 {
   "name": "topitauto",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Générateur de top pour faire des millions de vues sur YouTube (ou juste du shitpost Discord)",
   "private": true,
   "scripts": {
@@ -22,7 +22,7 @@
     "google-img-scrap": "^1.0.7",
     "image-downloader": "^4.3.0",
     "jimp": "^0.16.1",
-    "videoshow": "^0.1.12",
+    "videoshow": "file:videoshow-0.1.12.tgz",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },
