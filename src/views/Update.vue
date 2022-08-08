@@ -15,6 +15,7 @@
                 <p>Electron : {{Sys.electron}} </p>
                 <p>Node.js : {{Sys.node}}</p>
                 <p>Chromium : {{Sys.chrome}} </p>
+                <!-- <p>Vue : {{Vue.version}}</p> -->
                 <p>OS : {{Sys.os}} </p>
             </div>
         </div>
