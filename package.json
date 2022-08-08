@@ -1,6 +1,6 @@
 {
   "name": "topitauto",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Générateur de top pour faire des millions de vues sur YouTube (ou juste du shitpost Discord)",
   "private": true,
   "scripts": {
@@ -22,17 +22,17 @@
     "google-img-scrap": "^1.0.7",
     "image-downloader": "^4.3.0",
     "jimp": "^0.16.1",
-    "videoshow": "^0.1.12",
+    "videoshow": "file:videoshow-0.1.12.tgz",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
+    "@vue/cli-plugin-babel": "~5.0.8",
+    "@vue/cli-plugin-eslint": "~5.0.8",
+    "@vue/cli-plugin-router": "~5.0.8",
+    "@vue/cli-service": "~5.0.8",
     "electron": "^13.0.0",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^7.32.0",

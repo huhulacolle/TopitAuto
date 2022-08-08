@@ -8,7 +8,7 @@ module.exports = defineConfig({
       outputDir: 'build',
       builderOptions: {
         win: {
-          target: 'zip',
+          target: 'portable',
           icon: 'build/icon.icns',
           asar: true,
           "extraFiles": {
