@@ -127,7 +127,7 @@ ipcMain.handle("update?", async () => {
     title: 'Mise à jour',
     buttons: ['Oui', 'Non'],
     type: 'none',
-    message: 'Une nouvelle version est disponible, \nvoulez-vous le téléchargez ?',
+    message: 'Une nouvelle version est disponible, \nvoulez-vous la téléchargez ?',
     noLink: true
   })
 })
