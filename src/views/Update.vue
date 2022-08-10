@@ -25,7 +25,7 @@
 
 <script>
 import {ipcRenderer} from 'electron';
-const exec = require('child_process').execSync;
+import update from '@/services/update';
 
 export default {
     data() {
@@ -37,9 +37,11 @@ export default {
         this.Sys = await ipcRenderer.invoke('InfoSyst');
     },
     methods: {
-        checkUpdate() {
-            console.log("test");
-            exec('start https://github.com/huhulacolle/TopitAuto/releases')
+        async checkUpdate() {
+            const boolUpdate = await update.getUpdate();
+            if (!boolUpdate) {
+                await ipcRenderer.invoke("noUpdate");
+            }
         }
     }
 }

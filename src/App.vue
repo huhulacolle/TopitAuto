@@ -9,10 +9,13 @@
 </template>
 
 <script>
+import update from '@/services/update'
+
 export default {
     created() {
     // Prevent blank screen in Electron builds
-    this.$router.push('/')
+    this.$router.push('/');
+    update.getUpdate();
   }
 }
 </script>

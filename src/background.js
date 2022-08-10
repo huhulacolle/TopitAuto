@@ -117,6 +117,30 @@ ipcMain.handle("InfoSyst", async () => {
   return Sys;
 })
 
+ipcMain.handle("getCurrentVersion", async () => {
+  return app.getVersion();
+})
+
+ipcMain.handle("update?", async () => {
+  const window = BrowserWindow.getFocusedWindow();
+  return await dialog.showMessageBox(window, {
+    title: 'Mise à jour',
+    buttons: ['Oui', 'Non'],
+    type: 'none',
+    message: 'Une nouvelle version est disponible, \nvoulez-vous le téléchargez ?',
+    noLink: true
+  })
+})
+
+ipcMain.handle("noUpdate", async () => {
+  const window = BrowserWindow.getFocusedWindow();
+  return await dialog.showMessageBox(window, {
+    title: 'Mise à jour',
+    type: 'none',
+    message: 'Aucune nouvelle mise à jour disponible',
+  })
+})
+
 async function dl(url) {
   const imagePath = path.join(app.getPath('temp'), 'topitauto_temp')
   fs.existsSync(imagePath) || fs.mkdirSync(imagePath);

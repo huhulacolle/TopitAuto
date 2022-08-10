@@ -44,6 +44,7 @@
   import {
     ipcRenderer
   } from 'electron';
+
   const exec = require('child_process').exec;
 
   import * as JimpObj from 'jimp';

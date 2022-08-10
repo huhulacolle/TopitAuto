@@ -1,6 +1,6 @@
 {
   "name": "topitauto",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Générateur de top pour faire des millions de vues sur YouTube (ou juste du shitpost Discord)",
   "private": true,
   "scripts": {
@@ -10,12 +10,13 @@
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps",
-    "package": "pkg download.js --target win && pkg resize.js --target win && pkg video.js --target win"
+    "postuninstall": "electron-builder install-app-deps"
   },
   "main": "background.js",
   "dependencies": {
+    "axios": "^0.27.2",
     "bootstrap": "^5.1.3",
+    "compare-versions": "^4.1.3",
     "core-js": "^3.8.3",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^10.1.0",
