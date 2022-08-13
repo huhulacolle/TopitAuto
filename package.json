@@ -1,6 +1,6 @@
 {
   "name": "topitauto",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "Générateur de top pour faire des millions de vues sur YouTube (ou juste du shitpost Discord)",
   "private": true,
   "scripts": {
