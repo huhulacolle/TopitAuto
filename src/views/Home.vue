@@ -23,7 +23,7 @@
       </div>
       <br>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="hd">
+        <input class="form-check-input" :disabled="generateBool" type="checkbox" id="hd">
         <label class="form-check-label" for="flexCheckDefault">
           HD (Expérimental)
         </label>
