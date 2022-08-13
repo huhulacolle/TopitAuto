@@ -6,6 +6,9 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import path from 'path';
 import fs from 'fs';
 import { emptyDirSync } from 'fs-extra';
+
+var fileExtension = require('file-extension');
+
 const download = require('image-downloader');
 
 var videoshow = require('videoshow')
@@ -159,11 +162,18 @@ async function dl(url) {
       .catch((err) => console.error(err));
   }
   for (let i = 0; i < pathUrl.length; i++) {
-    if (pathUrl[i].split(".").pop() == "webp" || pathUrl[i].split(".").pop() == "gif" || pathUrl[i].split(".").pop() == "svg" || pathUrl[i].split("\\").pop() == "media") {
+    if (fileExtension(pathUrl[i]) != "png" && fileExtension(pathUrl[i]) != "jpg") {
       fs.unlinkSync(pathUrl[i]);
       pathUrl.splice(i, 1);
     }
+    if (fileExtension(pathUrl[i]) == "jpg") {
+      fs.renameSync(pathUrl[i], pathUrl[i].split(".")[0] + ".png")
+      pathUrl[i] = pathUrl[i].split(".")[0] + ".png";
+    }
   }
+  // for (let i = 0; i < pathUrl.length; i++) {
+  //   console.log(pathUrl[i], fileExtension(pathUrl[i]) != "png" && fileExtension(pathUrl[i]) != "jpg"); 
+  // }
   return pathUrl
 }
 
@@ -205,7 +215,7 @@ ipcMain.handle('video', async (event, pathUrl, musicPath) => {
 ipcMain.handle('getMusic', async () => {
   let music = "";
   await dialog.showOpenDialog({
-    defaultPath: app.getPath('music'),
+    defaultPath: app.getPath('downloads'),
     filters: [
       { name : 'MP3', extensions: ['mp3'] }
     ]
