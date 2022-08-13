@@ -165,10 +165,10 @@ async function dl(url) {
     if (fileExtension(pathUrl[i]) != "png" && fileExtension(pathUrl[i]) != "jpg") {
       fs.unlinkSync(pathUrl[i]);
       pathUrl.splice(i, 1);
-    }
-    if (fileExtension(pathUrl[i]) == "jpg") {
-      fs.renameSync(pathUrl[i], pathUrl[i].split(".")[0] + ".png")
-      pathUrl[i] = pathUrl[i].split(".")[0] + ".png";
+      if (fileExtension(pathUrl[i]) == "jpg") {
+        fs.renameSync(pathUrl[i], pathUrl[i].split(".")[0] + ".png")
+        pathUrl[i] = pathUrl[i].split(".")[0] + ".png";
+      }
     }
   }
   // for (let i = 0; i < pathUrl.length; i++) {
