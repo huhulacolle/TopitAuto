@@ -24,7 +24,7 @@
       <br>
       <div class="form-check">
         <input class="form-check-input" :disabled="generateBool" type="checkbox" id="hd">
-        <label class="form-check-label" for="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault" @click="clic()">
           HD (Expérimental)
         </label>
       </div>
@@ -61,9 +61,13 @@
       }
     },
     methods: {
-      test() {
-        const hd = document.getElementById('hd').checked;
-        console.log(hd);
+      clic() {
+        if (document.getElementById('hd').checked) {
+          document.getElementById('hd').checked = false;
+        }
+        else {
+          document.getElementById('hd').checked = true;
+        }
       },
       async generateTop() {
         if (this.musicPath) {
@@ -120,7 +124,7 @@
             pathUrl.forEach(async p => {
               const imgresize = await Jimp.read(p);
               if (hd) {
-                imgresize.resize(500, 500).write(p);
+                imgresize.resize(200, 200).write(p);
               }
               else {
                 imgresize.resize(50, 50).write(p);
